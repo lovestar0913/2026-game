@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        // 正規化，避免斜向移動速度比較快
+        // 避免斜向移動速度較快
         moveInput = new Vector2(horizontal, vertical).normalized;
     }
 
