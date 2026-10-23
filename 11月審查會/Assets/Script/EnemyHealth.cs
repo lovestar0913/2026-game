@@ -30,8 +30,12 @@ public class EnemyHealth : MonoBehaviour
 
         currentHP -= damage;
 
+        Debug.Log("敵人受到傷害，目前 HP：" + currentHP);
+
         if (currentHP <= 0)
+        {
             Die();
+        }
     }
 
     private void Die()
