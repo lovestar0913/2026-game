@@ -43,10 +43,7 @@ public class PlayerHealth : MonoBehaviour
         lastDamageTime = Time.time;
         currentHP = Mathf.Max(0, currentHP - damage);
 
-        Debug.Log(
-            "玩家受到 " + damage +
-            " 點傷害，目前 HP：" + currentHP
-        );
+        //Debug.Log("玩家受到 " + damage +" 點傷害，目前 HP：" + currentHP);
 
         if (currentHP <= 0)
         {
@@ -56,6 +53,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("玩家死亡！");
+        //Debug.Log("玩家死亡！");
     }
 }

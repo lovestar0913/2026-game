@@ -30,6 +30,33 @@ public class PlayerAutoAttack : MonoBehaviour
         attackTimer = attackInterval;
     }
 
+    // 取得敵人的身體中心
+    private Vector2 GetEnemyCenter(EnemyMovement enemy)
+    {
+        // 搜尋敵人底下所有子物件
+        Transform[] children =
+            enemy.GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform child in children)
+        {
+            if (child.name == "AimPoint")
+            {
+                Debug.Log(
+                    enemy.name + " 瞄準位置：" + child.position
+                );
+
+                return child.position;
+            }
+        }
+
+        Debug.LogWarning(
+            enemy.name + " 找不到 AimPoint，使用預設位置！"
+        );
+
+        return enemy.transform.position;
+    }
+
+    // 尋找最近的敵人
     private EnemyMovement FindNearestEnemy()
     {
         EnemyMovement[] enemies =
@@ -45,9 +72,10 @@ public class PlayerAutoAttack : MonoBehaviour
             if (enemy == null || !enemy.gameObject.activeInHierarchy)
                 continue;
 
+            Vector2 enemyCenter = GetEnemyCenter(enemy);
+
             float distanceSqr =
-                ((Vector2)enemy.transform.position -
-                 (Vector2)transform.position).sqrMagnitude;
+                (enemyCenter - (Vector2)transform.position).sqrMagnitude;
 
             if (distanceSqr < nearestDistanceSqr)
             {
@@ -59,32 +87,30 @@ public class PlayerAutoAttack : MonoBehaviour
         return nearestEnemy;
     }
 
-
+    // 發射子彈
     private void Shoot(EnemyMovement target)
     {
         if (bulletPrefab == null)
-        {
-            Debug.LogError("尚未設定 Bullet Prefab！", this);
             return;
-        }
 
         Vector2 spawnPosition = firePoint != null
             ? (Vector2)firePoint.position
             : (Vector2)transform.position;
 
-        Vector2 direction =
-            (Vector2)target.transform.position - spawnPosition;
+        // 瞄準敵人身體中心
+        Vector2 targetPosition = GetEnemyCenter(target);
+
+        Vector2 direction = targetPosition - spawnPosition;
 
         if (direction.sqrMagnitude <= 0.001f)
             return;
 
-        // 計算子彈飛行方向的角度
+        // 計算子彈旋轉角度
         float angle = Mathf.Atan2(
             direction.y,
             direction.x
         ) * Mathf.Rad2Deg;
 
-        // 生成子彈時，同時旋轉到目標方向
         Bullet bullet = Instantiate(
             bulletPrefab,
             spawnPosition,
@@ -92,10 +118,7 @@ public class PlayerAutoAttack : MonoBehaviour
         );
 
         bullet.Initialize(direction, bulletDamage);
-
-        Debug.Log("玩家向敵人發射子彈：" + target.name);
     }
-
 
     private void OnDrawGizmosSelected()
     {

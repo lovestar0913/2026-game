@@ -40,8 +40,6 @@ public class Bullet : MonoBehaviour
 
         hasHit = true;
 
-        Debug.Log("子彈命中敵人，造成 " + damage + " 點傷害");
-
         enemy.TakeDamage(damage);
 
         Destroy(gameObject);

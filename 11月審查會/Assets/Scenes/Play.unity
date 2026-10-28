@@ -151,9 +151,9 @@ MonoBehaviour:
   player: {fileID: 1211780039}
   enemies:
   - enemyData: {fileID: 11400000, guid: f344b4788b2e20f42b4d8a1670a65017, type: 2}
-    weight: 70
+    weight: 0
   - enemyData: {fileID: 11400000, guid: 74a3b2f3058f9df4ea76d2eaf4aa380e, type: 2}
-    weight: 30
+    weight: 100
   spawnInterval: 2
   spawnDistance: 8
   maxEnemies: 30
@@ -172,11 +172,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &320190258 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3545490062704727570, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
-  m_PrefabInstance: {fileID: 1722152175}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,12 +577,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296380875816685295, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
-      propertyPath: firePoint
-      value: 
-      objectReference: {fileID: 320190258}
-    - target: {fileID: 6296380875816685295, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
       propertyPath: attackInterval
-      value: 0.3
+      value: 0.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

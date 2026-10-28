@@ -17,4 +17,4 @@ MonoBehaviour:
   maxHP: 40
   moveSpeed: 4
   contactDamage: 10
-  prefab: {fileID: 2932314325635426834, guid: d7a98bbb4e561f045981ce1df55ab5fd, type: 3}
+  prefab: {fileID: 3490903101531820534, guid: 133f910772539f14984e6918275e2b6b, type: 3}

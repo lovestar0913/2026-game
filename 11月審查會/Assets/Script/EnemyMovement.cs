@@ -7,13 +7,13 @@ public class EnemyMovement : MonoBehaviour
     [Header("Enemy Data")]
     [SerializeField] private EnemyData enemyData;
 
-    private Rigidbody2D rb;
-    private Transform player;
+    protected Rigidbody2D rb;
+    protected Transform player;
     private SpriteRenderer spriteRenderer;
 
     public EnemyData Data => enemyData;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -27,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
         ApplyEnemyData();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         ApplyEnemyData();
 
@@ -58,7 +58,7 @@ public class EnemyMovement : MonoBehaviour
             spriteRenderer.sprite = enemyData.sprite;
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (player == null)
         {
