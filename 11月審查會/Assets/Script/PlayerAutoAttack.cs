@@ -41,17 +41,9 @@ public class PlayerAutoAttack : MonoBehaviour
         {
             if (child.name == "AimPoint")
             {
-                Debug.Log(
-                    enemy.name + " 瞄準位置：" + child.position
-                );
-
                 return child.position;
             }
         }
-
-        Debug.LogWarning(
-            enemy.name + " 找不到 AimPoint，使用預設位置！"
-        );
 
         return enemy.transform.position;
     }

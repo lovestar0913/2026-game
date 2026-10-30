@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 248484134}
+  - component: {fileID: 248484135}
   - component: {fileID: 248484133}
   m_Layer: 0
   m_Name: EnemySpawner
@@ -149,14 +150,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1211780039}
+  spawnArea: {fileID: 248484135}
+  warningPrefab: {fileID: 6435463371826018147, guid: 4166c7a8b531f0246b36b1e174681cf4, type: 3}
   enemies:
   - enemyData: {fileID: 11400000, guid: f344b4788b2e20f42b4d8a1670a65017, type: 2}
-    weight: 0
+    weight: 70
   - enemyData: {fileID: 11400000, guid: 74a3b2f3058f9df4ea76d2eaf4aa380e, type: 2}
-    weight: 100
-  spawnInterval: 2
-  spawnDistance: 8
-  maxEnemies: 30
+    weight: 30
+  spawnInterval: 1
+  warningDuration: 2
+  blockRadius: 0.5
+  initialSpawnCount: 2
+  increaseInterval: 20
+  increaseAmount: 3
 --- !u!4 &248484134
 Transform:
   m_ObjectHideFlags: 0
@@ -172,6 +178,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &248484135
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248484132}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 21, y: 13.5}
+  m_EdgeRadius: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4357333585147197565, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5.21
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4357333585147197565, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
       propertyPath: m_AnchoredPosition.y

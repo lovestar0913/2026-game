@@ -1,5 +1,7 @@
 
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -14,14 +16,23 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform player;
+    [SerializeField] private BoxCollider2D spawnArea;
+    [SerializeField] private GameObject warningPrefab;
+
+    [Header("Enemy Settings")]
     [SerializeField] private SpawnEntry[] enemies;
 
     [Header("Spawn Settings")]
-    [SerializeField] private float spawnInterval = 2f;
-    [SerializeField] private float spawnDistance = 8f;
-    [SerializeField] private int maxEnemies = 30;
+    [SerializeField] private float spawnInterval = 3f;
+    [SerializeField] private float warningDuration = 2.5f;
+    [SerializeField] private float blockRadius = 0.5f;
 
-    private float spawnTimer;
+    [Header("Difficulty Settings")]
+    [SerializeField] private int initialSpawnCount = 2;
+    [SerializeField] private float increaseInterval = 30f;
+    [SerializeField] private int increaseAmount = 1;
+
+    private float gameStartTime;
 
     private void Start()
     {
@@ -34,84 +45,159 @@ public class EnemySpawner : MonoBehaviour
                 player = playerObject.transform;
         }
 
-        spawnTimer = spawnInterval;
+        if (spawnArea == null || warningPrefab == null)
+        {
+            return;
+        }
+
+        gameStartTime = Time.time;
+
+        StartCoroutine(SpawnLoop());
     }
 
-    private void Update()
+    private IEnumerator SpawnLoop()
     {
-        if (player == null || enemies == null || enemies.Length == 0)
-            return;
-
-        spawnTimer -= Time.deltaTime;
-
-        if (spawnTimer <= 0f)
+        while (true)
         {
-            TrySpawnEnemy();
-            spawnTimer = spawnInterval;
+            yield return new WaitForSeconds(spawnInterval);
+
+            int spawnCount = GetCurrentSpawnCount();
+
+            yield return StartCoroutine(SpawnWave(spawnCount));
         }
     }
 
-    private void TrySpawnEnemy()
+    // 根據遊戲時間增加生成數量
+    private int GetCurrentSpawnCount()
     {
-        EnemyMovement[] aliveEnemies =
-            FindObjectsByType<EnemyMovement>(
-                FindObjectsSortMode.None
-            );
+        float elapsedTime = Time.time - gameStartTime;
 
-        if (aliveEnemies.Length >= maxEnemies)
-            return;
+        int increaseCount = 0;
 
-        EnemyData data = ChooseEnemy();
+        if (increaseInterval > 0f)
+        {
+            increaseCount =
+                Mathf.FloorToInt(elapsedTime / increaseInterval);
+        }
 
-        if (data == null || data.prefab == null)
-            return;
-
-        Vector2 direction = Random.insideUnitCircle.normalized;
-
-        if (direction.sqrMagnitude < 0.01f)
-            direction = Vector2.up;
-
-        Vector2 position =
-            (Vector2)player.position + direction * spawnDistance;
-
-        GameObject obj = Instantiate(
-            data.prefab,
-            new Vector3(position.x, position.y, 0f),
-            Quaternion.identity
-        );
-
-        EnemyMovement movement = obj.GetComponent<EnemyMovement>();
-        EnemyHealth health = obj.GetComponent<EnemyHealth>();
-
-        if (movement != null)
-            movement.Initialize(data, player);
-
-        if (health != null)
-            health.Initialize(data);
+        return initialSpawnCount +
+               increaseCount * increaseAmount;
     }
 
+    // 一次安排多個生成位置
+    private IEnumerator SpawnWave(int count)
+    {
+        List<GameObject> warnings = new List<GameObject>();
+        List<Vector2> positions = new List<Vector2>();
+        List<EnemyData> selectedEnemies = new List<EnemyData>();
+
+        // 同時建立所有紅色 X
+        for (int i = 0; i < count; i++)
+        {
+            EnemyData data = ChooseEnemy();
+
+            if (data == null)
+                continue;
+
+            Vector2 position = GetRandomSpawnPosition();
+
+            GameObject warning = Instantiate(
+                warningPrefab,
+                position,
+                Quaternion.identity
+            );
+
+            SpawnWarningEffect effect =
+                warning.GetComponent<SpawnWarningEffect>();
+
+            if (effect != null)
+                effect.Play(warningDuration);
+
+            warnings.Add(warning);
+            positions.Add(position);
+            selectedEnemies.Add(data);
+        }
+
+        // 等待預警結束
+        yield return new WaitForSeconds(warningDuration);
+
+        // 分別判斷每個位置是否被玩家阻止
+        for (int i = 0; i < warnings.Count; i++)
+        {
+            Vector2 position = positions[i];
+
+            bool blocked = false;
+
+            if (player != null)
+            {
+                float distance = Vector2.Distance(
+                    player.position,
+                    position
+                );
+
+                blocked = distance <= blockRadius;
+            }
+
+            Destroy(warnings[i]);
+
+            if (blocked)
+            {
+                //Debug.Log("玩家成功阻止一隻怪物生成！");
+            }
+            else
+            {
+                SpawnEnemy(selectedEnemies[i], position);
+            }
+        }
+
+    }
+
+    // 在地圖範圍內隨機選擇位置
+    private Vector2 GetRandomSpawnPosition()
+    {
+        Bounds bounds = spawnArea.bounds;
+
+        float randomX = Random.Range(
+            bounds.min.x,
+            bounds.max.x
+        );
+
+        float randomY = Random.Range(
+            bounds.min.y,
+            bounds.max.y
+        );
+
+        return new Vector2(randomX, randomY);
+    }
+
+    // 加權隨機選擇敵人
     private EnemyData ChooseEnemy()
     {
+        if (enemies == null || enemies.Length == 0)
+            return null;
+
         float totalWeight = 0f;
 
         foreach (SpawnEntry entry in enemies)
         {
-            if (entry.enemyData != null &&
-                entry.enemyData.prefab != null &&
-                entry.weight > 0f)
-            {
-                totalWeight += entry.weight;
-            }
+            if (entry == null ||
+                entry.enemyData == null ||
+                entry.enemyData.prefab == null ||
+                entry.weight <= 0f)
+                continue;
+
+            totalWeight += entry.weight;
         }
 
         if (totalWeight <= 0f)
             return null;
 
-        float randomValue = Random.value * totalWeight;
+        float randomValue = Random.Range(0f, totalWeight);
 
         foreach (SpawnEntry entry in enemies)
         {
-            if (entry.enemyData == null ||
+            if (entry == null ||
+                entry.enemyData == null ||
                 entry.enemyData.prefab == null ||
                 entry.weight <= 0f)
                 continue;
@@ -123,5 +209,40 @@ public class EnemySpawner : MonoBehaviour
         }
 
         return null;
+    }
+
+    // 生成敵人
+    private void SpawnEnemy(EnemyData data, Vector2 position)
+    {
+        GameObject enemyObject = Instantiate(
+            data.prefab,
+            position,
+            Quaternion.identity
+        );
+
+        EnemyMovement movement =
+            enemyObject.GetComponent<EnemyMovement>();
+
+        EnemyHealth health =
+            enemyObject.GetComponent<EnemyHealth>();
+
+        if (movement != null)
+            movement.Initialize(data, player);
+
+        if (health != null)
+            health.Initialize(data);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (spawnArea == null)
+            return;
+
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawWireCube(
+            spawnArea.bounds.center,
+            spawnArea.bounds.size
+        );
     }
 }
