@@ -118,10 +118,13 @@ public class EnemySpawner : MonoBehaviour
             selectedEnemies.Add(data);
         }
 
-        // 等待預警結束
+
+        // 等待紅色 X 完成閃爍
         yield return new WaitForSeconds(warningDuration);
 
-        // 分別判斷每個位置是否被玩家阻止
+        // 先判斷玩家是否阻止生成，鎖定結果
+        List<bool> blockedResults = new List<bool>();
+
         for (int i = 0; i < warnings.Count; i++)
         {
             Vector2 position = positions[i];
@@ -138,17 +141,27 @@ public class EnemySpawner : MonoBehaviour
                 blocked = distance <= blockRadius;
             }
 
-            Destroy(warnings[i]);
+            blockedResults.Add(blocked);
 
-            if (blocked)
+            // 紅色 X 消失
+            Destroy(warnings[i]);
+        }
+
+        // 判定完成後才開始延遲
+        yield return new WaitForSeconds(0.1f);
+
+        // 根據已鎖定的結果生成怪物
+        for (int i = 0; i < blockedResults.Count; i++)
+        {
+            if (blockedResults[i])
             {
-                //Debug.Log("玩家成功阻止一隻怪物生成！");
             }
             else
             {
-                SpawnEnemy(selectedEnemies[i], position);
+                SpawnEnemy(selectedEnemies[i], positions[i]);
             }
         }
+
 
     }
 

@@ -325,7 +325,7 @@ MonoBehaviour:
   prepareTime: 0.8
   dashSpeed: 8
   recoveryTime: 0.3
-  overshootDistance: 0.5
+  overshootDistance: 0.8
 --- !u!114 &1084627804039401445
 MonoBehaviour:
   m_ObjectHideFlags: 0
