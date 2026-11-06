@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2c41fdda3bfcf41b9ae1ff25cd0ac6, type: 3}
   m_Name: GreenSlime
   m_EditorClassIdentifier: 
-  enemyName: Enemy
+  enemyName: Slime
   sprite: {fileID: 0}
   maxHP: 20
   moveSpeed: 2
   contactDamage: 5
+  coinPrefab: {fileID: 7718607441240931859, guid: 43bb60e7d9618224b834cd758d2cb7ff, type: 3}
+  coinDropChance: 0.8
+  minCoins: 1
+  maxCoins: 2
   prefab: {fileID: 2073777670517664689, guid: 041d83956a249f342ac93332c1e76dfa, type: 3}

@@ -70,7 +70,7 @@ public class RoundManager : MonoBehaviour
         if (IsGameFinished) return;
 
         if (roundText != null)
-            roundText.text = "WAVE " + currentRound + " / " + totalRounds;
+            roundText.text = "WAVE " + currentRound;
 
         if (timerText != null)
         {

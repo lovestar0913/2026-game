@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -30,7 +29,6 @@ public class EnemyHealth : MonoBehaviour
 
         currentHP -= damage;
 
-        //Debug.Log("敵人受到傷害，目前 HP：" + currentHP);
 
         if (currentHP <= 0)
         {
@@ -40,6 +38,23 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
+        DropCoins();
         Destroy(gameObject);
+    }
+
+    private void DropCoins()
+    {
+        if (enemyData == null || enemyData.coinPrefab == null)
+            return;
+
+        if (Random.value > enemyData.coinDropChance)
+            return;
+
+        int count = Random.Range(enemyData.minCoins, enemyData.maxCoins + 1);
+
+        for (int i = 0; i < count; i++)
+        {
+            Instantiate(enemyData.coinPrefab, transform.position, Quaternion.identity);
+        }
     }
 }
