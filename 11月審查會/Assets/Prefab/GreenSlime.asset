@@ -20,5 +20,5 @@ MonoBehaviour:
   coinPrefab: {fileID: 7718607441240931859, guid: 43bb60e7d9618224b834cd758d2cb7ff, type: 3}
   coinDropChance: 0.8
   minCoins: 1
-  maxCoins: 2
+  maxCoins: 1
   prefab: {fileID: 2073777670517664689, guid: 041d83956a249f342ac93332c1e76dfa, type: 3}

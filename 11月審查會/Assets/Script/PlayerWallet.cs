@@ -37,6 +37,6 @@ public class PlayerWallet : MonoBehaviour
     private void UpdateUI()
     {
         if (coinText != null)
-            coinText.text = "COINS: " + Coins;
+            coinText.text = "￥: " + Coins;
     }
 }
