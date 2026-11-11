@@ -1,13 +1,12 @@
-
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour
 {
-    [Header("Bullet Settings")]
-    public float speed = 10f;
-    public int damage = 1;
-    public float lifetime = 3f;
+    [Header("子彈設定")]
+    [Label("飛行速度")] public float speed = 10f;
+    [Label("傷害")] public int damage = 1;
+    [Label("存活時間（秒）")] public float lifetime = 3f;
 
     private Rigidbody2D rb;
     private bool hasHit;
@@ -40,7 +39,13 @@ public class Bullet : MonoBehaviour
 
         hasHit = true;
 
-        enemy.TakeDamage(damage);
+        // 套用攻擊力加成與爆擊
+        int finalDamage = damage;
+
+        if (PlayerStats.Instance != null)
+            finalDamage = PlayerStats.Instance.CalculateDamage(damage, out bool isCrit);
+
+        enemy.TakeDamage(finalDamage);
 
         Destroy(gameObject);
     }

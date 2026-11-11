@@ -29,7 +29,6 @@ public class EnemyHealth : MonoBehaviour
 
         currentHP -= damage;
 
-
         if (currentHP <= 0)
         {
             Die();
@@ -39,7 +38,16 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         DropCoins();
+        GiveXp();
         Destroy(gameObject);
+    }
+
+    private void GiveXp()
+    {
+        if (enemyData == null || PlayerLevel.Instance == null)
+            return;
+
+        PlayerLevel.Instance.AddXp(enemyData.xpReward);
     }
 
     private void DropCoins()

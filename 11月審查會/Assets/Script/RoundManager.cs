@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour
 {
-    [Header("Round Settings")]
-    [SerializeField] private int totalRounds = 10;
-    [SerializeField] private float roundDuration = 60f;
+    [Header("波數設定")]
+    [SerializeField, Label("總波數")] private int totalRounds = 10;
+    [SerializeField, Label("每波秒數")] private float roundDuration = 60f;
 
     [Header("UI")]
-    [SerializeField] private Text roundText;
-    [SerializeField] private Text timerText;
+    [SerializeField, Label("波數文字")] private Text roundText;
+    [SerializeField, Label("計時文字")] private Text timerText;
 
     private int currentRound = 1;
     private float remainingTime;
@@ -40,7 +40,6 @@ public class RoundManager : MonoBehaviour
 
     private void EndRound()
     {
-
         if (currentRound >= totalRounds)
         {
             FinishGame();
@@ -50,13 +49,36 @@ public class RoundManager : MonoBehaviour
         currentRound++;
         remainingTime = roundDuration;
 
+        StartBetweenWaves();
+    }
+
+    // 波與波之間：有升級點先顯示升級畫面，之後一定進商店
+    private void StartBetweenWaves()
+    {
+        int points = 0;
+
+        if (PlayerLevel.Instance != null)
+            points = PlayerLevel.Instance.ConsumeAllUpgrades();
+
+        if (points > 0 && UpgradeUI.Instance != null)
+        {
+            UpgradeUI.Instance.Show(points, OpenShop);
+            return;
+        }
+
+        OpenShop();
+    }
+
+    private void OpenShop()
+    {
+        if (ShopUI.Instance != null)
+            ShopUI.Instance.Show();
     }
 
     private void FinishGame()
     {
         IsGameFinished = true;
         remainingTime = 0f;
-
 
         if (roundText != null)
             roundText.text = "ALL ROUNDS COMPLETED";

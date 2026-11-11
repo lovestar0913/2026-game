@@ -2,24 +2,25 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [Header("Visual")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Sprite[] coinSprites; // 放入2種金幣圖案
+    [Header("外觀")]
+    [SerializeField, Label("Sprite Renderer")] private SpriteRenderer spriteRenderer;
+    [Tooltip("金幣圖案，每次隨機抽一個")]
+    [SerializeField] private Sprite[] coinSprites;
 
-    [Header("Value")]
-    [SerializeField] private int value = 1;
+    [Header("價值")]
+    [SerializeField, Label("金幣價值")] private int value = 1;
 
-    [Header("Magnet")]
-    [SerializeField] private float magnetRange = 3f;
-    [SerializeField] private float magnetSpeed = 10f;
-    [SerializeField] private float collectDistance = 0.3f;
+    [Header("拾取")]
+    [SerializeField, Label("拾取範圍")] private float magnetRange = 3f;
+    [SerializeField, Label("拾取速度")] private float magnetSpeed = 10f;
+    [SerializeField, Label("拾取距離")] private float collectDistance = 0.3f;
 
-    [Header("Pop")]
-    [SerializeField] private float popSpeed = 3f;
-    [SerializeField] private float popDuration = 0.25f;
+    [Header("掉落物")]
+    [SerializeField, Label("彈開速度")] private float popSpeed = 3f;
+    [SerializeField, Label("彈開時間")] private float popDuration = 0.25f;
 
-    [Header("Lifetime")]
-    [SerializeField] private float lifetime = 15f; // 0 = 不會消失
+    [Header("存活")]
+    [SerializeField, Label("存活秒數（0不消失）")] private float lifetime = 0f;
 
     private Transform player;
     private Vector2 popVelocity;

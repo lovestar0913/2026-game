@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class PlayerAutoAttack : MonoBehaviour
 {
-    [Header("Bullet")]
-    [SerializeField] private Bullet bulletPrefab;
-    [SerializeField] private Transform firePoint;
+    [Header("子彈")]
+    [SerializeField, Label("子彈 Prefab")] private Bullet bulletPrefab;
+    [SerializeField, Label("發射點")] private Transform firePoint;
 
-    [Header("Attack Settings")]
-    [SerializeField] private float attackRange = 8f;
-    [SerializeField] private float attackInterval = 1f;
-    [SerializeField] private int bulletDamage = 1;
+    [Header("攻擊設定")]
+    [SerializeField, Label("攻擊範圍")] private float attackRange = 8f;
+    [SerializeField, Label("攻擊間隔（秒）")] private float attackInterval = 1f;
+    [SerializeField, Label("子彈基礎傷害")] private int bulletDamage = 50;
 
     private float attackTimer;
 
