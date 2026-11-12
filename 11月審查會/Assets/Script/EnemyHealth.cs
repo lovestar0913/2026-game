@@ -11,15 +11,18 @@ public class EnemyHealth : MonoBehaviour
     public void Initialize(EnemyData data)
     {
         enemyData = data;
-        currentHP = enemyData != null ? enemyData.maxHP : 3;
+        currentHP = GetMaxHP();
     }
 
     private void Awake()
     {
-        if (enemyData != null)
-            currentHP = enemyData.maxHP;
-        else
-            currentHP = 3;
+        currentHP = GetMaxHP();
+    }
+
+    private int GetMaxHP()
+    {
+        int baseHP = enemyData != null ? enemyData.maxHP : 3;
+        return Mathf.Max(1, Mathf.RoundToInt(baseHP * GameSettings.EnemyHpMultiplier));
     }
 
     public void TakeDamage(int damage)
