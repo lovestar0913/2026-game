@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -49,6 +48,17 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+    }
+
+    // 回復血量（不會超過最大血量，死亡後不能回復）
+    public void Heal(int amount)
+    {
+        if (amount <= 0 || currentHP <= 0)
+            return;
+
+        currentHP = Mathf.Min(maxHP, currentHP + amount);
+
+        //Debug.Log("玩家回復 " + amount + " 點，目前 HP：" + currentHP);
     }
 
     private void Die()

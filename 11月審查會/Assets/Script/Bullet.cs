@@ -47,6 +47,10 @@ public class Bullet : MonoBehaviour
 
         enemy.TakeDamage(finalDamage);
 
+        // 通知被動技能（例如戰士的命中回復）
+        if (PlayerPassive.Instance != null)
+            PlayerPassive.Instance.OnDamageDealt(finalDamage);
+
         Destroy(gameObject);
     }
 }

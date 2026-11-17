@@ -248,14 +248,22 @@ public class MainMenuUI : MonoBehaviour
 
     private string BuildStatsText(CharacterData data)
     {
-        return
+        string text =
             "血量　　　" + data.maxHP + "\n" +
-            "移動速度　" + data.moveSpeed.ToString("0.#") + "\n" +
+            "速度　" + data.moveSpeed.ToString("0.#") + "\n" +
             "攻擊力　　" + data.attackDamage + "\n" +
             "攻擊間隔　" + data.attackInterval.ToString("0.##") + " 秒\n" +
-            "攻擊範圍　" + data.attackRange.ToString("0.#") + "\n" +
-            "爆擊率　　" + Mathf.RoundToInt(data.critRate * 100f) + "%\n" +
-            "爆擊傷害　" + Mathf.RoundToInt(data.critDamage * 100f) + "%";
+            "攻擊範囲　" + data.attackRange.ToString("0.#") + "\n" +
+            "ケリ率　　" + Mathf.RoundToInt(data.critRate * 100f) + "%\n" +
+            "くりダメ　" + Mathf.RoundToInt(data.critDamage * 100f) + "%";
+
+        // 被動技能說明（沒有被動的角色不會顯示）
+        string passive = data.GetPassiveText();
+
+        if (!string.IsNullOrEmpty(passive))
+            text += "\n\nパッシブ\n" + passive;
+
+        return text;
     }
 
     // 只顯示外框，不改變按鈕本身的顏色

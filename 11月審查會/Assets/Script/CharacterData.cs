@@ -8,7 +8,7 @@ public class CharacterData : ScriptableObject
 {
     [Header("基本資料")]
     [Label("角色名稱")] public string characterName = "角色";
-    [Tooltip("角色 Prefab。沒有指定頭像或全身圖時，會取 Prefab 上的 SpriteRenderer 圖片顯示")]
+    [Tooltip("角色 Prefab。沒有指定頭像或全身圖時，會把整個 Prefab 拍成圖片顯示")]
     public GameObject prefab;
     [Tooltip("選擇畫面欄位用的頭像（可不指定）")]
     public Sprite portrait;
@@ -26,7 +26,24 @@ public class CharacterData : ScriptableObject
     [Label("爆擊率", 0f, 1f)] public float critRate = 0.05f;
     [Label("爆擊傷害倍率", 1f)] public float critDamage = 1.5f;
 
-    // 頭像：頭像 → 全身圖 → Prefab 圖片
+    [Header("被動技能")]
+    [Label("命中回復機率（0.005 = 0.5%）", 0f, 1f)] public float healOnHitChance = 0.005f;
+    [Label("命中回復量", 0)] public int healOnHitAmount = 1;
+
+    [System.NonSerialized] private Sprite prefabSnapshot;
+
+    // 被動說明文字（沒有被動時回傳空字串）
+    public string GetPassiveText()
+    {
+        if (healOnHitChance <= 0f || healOnHitAmount <= 0)
+            return "";
+
+        return "ダメージを与えた際、" +
+               (healOnHitChance * 100f).ToString("0.##") +
+               "%の確率でHPが" + healOnHitAmount + "回復する";
+    }
+
+    // 頭像：頭像 → 全身圖 → Prefab 照片
     public Sprite GetPortrait()
     {
         if (portrait != null) return portrait;
@@ -34,7 +51,7 @@ public class CharacterData : ScriptableObject
         return GetPrefabSprite();
     }
 
-    // 全身圖：全身圖 → Prefab 圖片
+    // 全身圖：全身圖 → Prefab 照片
     public Sprite GetFullBody()
     {
         if (fullBody != null) return fullBody;
@@ -43,11 +60,13 @@ public class CharacterData : ScriptableObject
 
     private Sprite GetPrefabSprite()
     {
-        if (prefab == null) return null;
+        if (prefab == null)
+            return null;
 
-        SpriteRenderer spriteRenderer =
-            prefab.GetComponentInChildren<SpriteRenderer>(true);
+        // 只拍一次，之後重複使用
+        if (prefabSnapshot == null)
+            prefabSnapshot = PrefabSnapshot.Render(prefab);
 
-        return spriteRenderer != null ? spriteRenderer.sprite : null;
+        return prefabSnapshot;
     }
 }
