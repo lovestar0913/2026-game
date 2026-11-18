@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Shark
   sprite: {fileID: 0}
-  maxHP: 40
+  maxHP: 25
   moveSpeed: 4
-  contactDamage: 10
+  contactDamage: 8
   coinPrefab: {fileID: 7718607441240931859, guid: 43bb60e7d9618224b834cd758d2cb7ff, type: 3}
   coinDropChance: 0.8
   minCoins: 1
   maxCoins: 2
+  xpReward: 1
   prefab: {fileID: 3100547381911853335, guid: 133f910772539f14984e6918275e2b6b, type: 3}

@@ -30,10 +30,15 @@ public class ShopUI : MonoBehaviour
     private int attackBought;
     private int critDamageBought;
     private int critRateBought;
+    private bool isReady;
 
     private void Awake()
     {
         Instance = this;
+
+        // 先關閉面板，避免欄位沒設好時面板一直顯示
+        if (panel != null)
+            panel.SetActive(false);
 
         if (panel == null || nextWaveButton == null ||
             attackButton == null || critDamageButton == null || critRateButton == null)
@@ -47,12 +52,12 @@ public class ShopUI : MonoBehaviour
         critRateButton.onClick.AddListener(BuyCritRate);
         nextWaveButton.onClick.AddListener(Close);
 
-        panel.SetActive(false);
+        isReady = true;
     }
 
     public void Show()
     {
-        if (panel == null)
+        if (!isReady)
             return;
 
         panel.SetActive(true);
@@ -119,10 +124,10 @@ public class ShopUI : MonoBehaviour
         int coins = PlayerWallet.Instance != null ? PlayerWallet.Instance.Coins : 0;
 
         if (titleText != null)
-            titleText.text = "商店";
+            titleText.text = "Shop";
 
         if (coinText != null)
-            coinText.text = "金幣：" + coins;
+            coinText.text = "￥：" + coins;
 
         if (stats == null)
             return;
@@ -134,12 +139,12 @@ public class ShopUI : MonoBehaviour
 
         if (critDamageLabel != null)
             critDamageLabel.text =
-                "爆擊傷害 +" + Mathf.RoundToInt(stats.CritDamagePerUpgrade * 100f) + "%" +
+                "クリダメ +" + Mathf.RoundToInt(stats.CritDamagePerUpgrade * 100f) + "%" +
                 "\n價格：" + CritDamagePrice;
 
         if (critRateLabel != null)
             critRateLabel.text =
-                "爆擊率 +" + Mathf.RoundToInt(stats.CritRatePerUpgrade * 100f) + "%" +
+                "クリ率 +" + Mathf.RoundToInt(stats.CritRatePerUpgrade * 100f) + "%" +
                 "\n價格：" + CritRatePrice;
 
         // 金幣不夠就不能按

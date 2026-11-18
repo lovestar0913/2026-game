@@ -16,7 +16,7 @@ MonoBehaviour:
   prefab: {fileID: 3111804752363777557, guid: 0ff1c4b6ca4f8a641b9a39338887d7ce, type: 3}
   portrait: {fileID: 0}
   fullBody: {fileID: 0}
-  description: 
+  description: "\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u305F\u969B\u30011%\u306E\u78BA\u7387\u3067HP\u304C1\u56DE\u5FA9\u3059\u308B"
   maxHP: 20
   moveSpeed: 5
   attackDamage: 5
@@ -24,3 +24,5 @@ MonoBehaviour:
   attackRange: 5
   critRate: 0.3
   critDamage: 1.5
+  healOnHitChance: 0.005
+  healOnHitAmount: 1

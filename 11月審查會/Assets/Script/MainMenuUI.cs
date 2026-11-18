@@ -254,8 +254,8 @@ public class MainMenuUI : MonoBehaviour
             "攻擊力　　" + data.attackDamage + "\n" +
             "攻擊間隔　" + data.attackInterval.ToString("0.##") + " 秒\n" +
             "攻擊範囲　" + data.attackRange.ToString("0.#") + "\n" +
-            "ケリ率　　" + Mathf.RoundToInt(data.critRate * 100f) + "%\n" +
-            "くりダメ　" + Mathf.RoundToInt(data.critDamage * 100f) + "%";
+            "クリ率　　" + Mathf.RoundToInt(data.critRate * 100f) + "%\n" +
+            "クリダメ　" + Mathf.RoundToInt(data.critDamage * 100f) + "%";
 
         // 被動技能說明（沒有被動的角色不會顯示）
         string passive = data.GetPassiveText();

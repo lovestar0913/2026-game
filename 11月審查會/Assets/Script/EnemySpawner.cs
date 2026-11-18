@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,29 +7,29 @@ public class EnemySpawner : MonoBehaviour
     [System.Serializable]
     public class SpawnEntry
     {
-        public EnemyData enemyData;
+        [Label("敵人資料")] public EnemyData enemyData;
 
-        [Min(0f)]
-        public float weight = 1f;
+        [Label("出現權重（越大越容易出現）", 0f)] public float weight = 1f;
     }
 
-    [Header("References")]
-    [SerializeField] private Transform player;
-    [SerializeField] private BoxCollider2D spawnArea;
-    [SerializeField] private GameObject warningPrefab;
+    [Header("參考物件")]
+    [SerializeField, Label("玩家（空白則自動找 Player）")] private Transform player;
+    [SerializeField, Label("生成範圍")] private BoxCollider2D spawnArea;
+    [SerializeField, Label("紅色 X 警告 Prefab")] private GameObject warningPrefab;
 
-    [Header("Enemy Settings")]
+    [Header("敵人設定")]
+    [Tooltip("可生成的敵人清單，依權重隨機抽選")]
     [SerializeField] private SpawnEntry[] enemies;
 
-    [Header("Spawn Settings")]
-    [SerializeField] private float spawnInterval = 3f;
-    [SerializeField] private float warningDuration = 2.5f;
-    [SerializeField] private float blockRadius = 0.5f;
+    [Header("生成設定")]
+    [SerializeField, Label("每批生成間隔（秒）", 0f)] private float spawnInterval = 3f;
+    [SerializeField, Label("警告顯示時間（秒）", 0f)] private float warningDuration = 2.5f;
+    [SerializeField, Label("玩家阻止生成的半徑", 0f)] private float blockRadius = 0.5f;
 
-    [Header("Difficulty Settings")]
-    [SerializeField] private int initialSpawnCount = 2;
-    [SerializeField] private float increaseInterval = 30f;
-    [SerializeField] private int increaseAmount = 1;
+    [Header("難度設定")]
+    [SerializeField, Label("初始每批生成數量", 0)] private int initialSpawnCount = 2;
+    [SerializeField, Label("增加數量的間隔（秒）", 0f)] private float increaseInterval = 30f;
+    [SerializeField, Label("每次增加的數量", 0)] private int increaseAmount = 1;
 
     private float gameStartTime;
 
